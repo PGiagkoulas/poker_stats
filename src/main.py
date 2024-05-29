@@ -92,9 +92,7 @@ class Hand:
 
         :return: True, if exactly 1 triplet and 1 pair are present, False otherwise
         """
-        counter_dict = self.__create_counter_dict("value")
-        if sum(1 for count in counter_dict.values() if count == 3) == 1 \
-                and sum(1 for count in counter_dict.values() if count == 2) == 1:
+        if self.__is_three_of_a_kind() and self.__is_one_pair():
             return True
         return False
 
@@ -115,10 +113,10 @@ class Hand:
 
         :return: True, if , False otherwise
         """
-        sorted_card_values = [c.value for c in self.cards]
+        sorted_card_values = [c.value.value for c in self.cards]
         sorted_card_values.sort()
-        card_value_diffs = [(sorted_card_values[i].value - sorted_card_values[i+1].value) % 12
-                            for i in range(len(sorted_card_values))]
+        card_value_diffs = [(sorted_card_values[i] - sorted_card_values[i+1]) % 12
+                            for i in range(len(sorted_card_values) - 1)]
         if sum(1 for diff in card_value_diffs if diff == 1) >= 5:  # TODO: detect straight start & end
             return True
         return False
@@ -166,8 +164,8 @@ class Hand:
             hand_strength = HandStrength.FULL_HOUSE
         elif self.__is_flush():
             hand_strength = HandStrength.FLUSH
-        elif self.__is_straight():
-            hand_strength = HandStrength.STRAIGHT
+        # elif self.__is_straight():
+        #     hand_strength = HandStrength.STRAIGHT
         elif self.__is_three_of_a_kind():
             hand_strength = HandStrength.THREE_OF_A_KIND
         elif self.__is_two_pair():
