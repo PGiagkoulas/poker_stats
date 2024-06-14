@@ -1,7 +1,6 @@
 from enum import Enum
 from collections import Counter
 import operator
-import random
 
 
 class Colour(Enum):
@@ -115,9 +114,9 @@ class Hand:
         """
         sorted_card_values = [c.value.value for c in self.cards]
         sorted_card_values.sort()
-        card_value_diffs = [(sorted_card_values[i] - sorted_card_values[i+1]) % 12
+        card_value_diffs = [(sorted_card_values[i+1] - sorted_card_values[i]) % 12
                             for i in range(len(sorted_card_values) - 1)]
-        if sum(1 for diff in card_value_diffs if diff == 1) >= 5:  # TODO: detect straight start & end
+        if sum(1 for diff in card_value_diffs if diff == 1) >= 4:  # TODO: detect straight start & end
             return True
         return False
 
@@ -164,8 +163,8 @@ class Hand:
             hand_strength = HandStrength.FULL_HOUSE
         elif self.__is_flush():
             hand_strength = HandStrength.FLUSH
-        # elif self.__is_straight():
-        #     hand_strength = HandStrength.STRAIGHT
+        elif self.__is_straight():
+            hand_strength = HandStrength.STRAIGHT
         elif self.__is_three_of_a_kind():
             hand_strength = HandStrength.THREE_OF_A_KIND
         elif self.__is_two_pair():
@@ -176,10 +175,16 @@ class Hand:
 
 
 if __name__ == '__main__':
-    # cards = [Card(random.choice(list(Colour)), random.choice(list(Value))) for _ in range(7)]
-    cards = [Card(Colour.CLUBS, random.choice(list(Value))) for _ in range(7)]
-    # cards = [Card(random.choice(list(Colour)), random.choice(list(Value)[:3])) for _ in range(7)]
-    cards.sort()
-    my_hand = Hand(cards)
+    my_hand = Hand(
+        [
+            Card(Colour.CLUBS, Value.TWO),
+            Card(Colour.HEARTS, Value.ACE),
+            Card(Colour.DIAMONDS, Value.THREE),
+            Card(Colour.SPADES, Value.SIX),
+            Card(Colour.CLUBS, Value.FIVE),
+            Card(Colour.HEARTS, Value.FOUR),
+            Card(Colour.DIAMONDS, Value.ACE)
+        ]
+    )
     print(my_hand)
     print(my_hand.get_hand_strength())
