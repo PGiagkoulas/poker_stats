@@ -17,18 +17,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        uses: |
+        run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Running tests with pytest
-        uses:
+        run:
           pytest ./tests
 
       - name: Linting with flake8
-        uses:
+        run:
           flake8
 
       - name: Coverage with PyTest and coverage
-        uses:
+        run:
             pytest
