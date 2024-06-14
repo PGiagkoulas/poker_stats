@@ -139,5 +139,3 @@ def test_is_not_hand_strength_straight():
             Card(Colour.DIAMONDS, Value.ACE)
         ]
     ).get_hand_strength() != HandStrength.STRAIGHT
-
-
